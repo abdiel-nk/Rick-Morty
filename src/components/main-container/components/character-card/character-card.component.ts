@@ -1,15 +1,23 @@
-import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, EffectRef, inject, Injector, input, InputSignal, OnInit, output, OutputEmitterRef } from '@angular/core';
 import { Character } from '../../../../models/character.model';
-import { NgOptimizedImage } from '@angular/common';
+import { JsonPipe, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-character-card',
   standalone: true,
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, JsonPipe],
   templateUrl: './character-card.component.html',
   styleUrl: './character-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CharacterCardComponent {
-character : InputSignal<Character> = input.required<Character>();
+export class CharacterCardComponent implements OnInit{
+  character = input.required<Character>();
+  characterInfo= input<Character>() ; 
+  loaded = output<string>();
+  
+
+  
+  ngOnInit():void{
+    this.loaded.emit(this.character().url);
+  }
 }
